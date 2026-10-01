@@ -1,0 +1,20 @@
+# Secrets - niemals hochladen
+*.env
+secrets.txt
+*.key
+*.pem
+
+# Python-Reste
+__pycache__/
+*.pyc
+.venv/
+
+# Azurite (lokale Storage-Daten)
+infra/azurite-data/
+__blobstorage__/
+__queuestorage__/
+__azurite_db*__.json
+
+# Editor / System
+.vscode/
+.DS_Store
