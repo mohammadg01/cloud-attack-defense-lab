@@ -13,8 +13,8 @@
 | Token aus IMDS stehlen | Unsecured Credentials: Cloud Instance Metadata API | T1552.005 |
 | Gestohlene Identität nutzen | Valid Accounts: Cloud Accounts | T1078.004 |
 
-## Erkennung (Woche 2)
+## Erkennung 
 Leitindikatoren in den Logs: ausgehender Request der Web-App auf `169.254.169.254` (SSRF-Verdacht), unmittelbar gefolgt von einem Storage-Zugriff - diese Verkettung macht den Angriff sichtbar.
 
-## Behebung (Woche 3)
+## Behebung 
 SSRF-Fix per Allowlist (nur erlaubte Ziele, `169.254.169.254` blocken), Least Privilege an der Identität, IMDS-Zugriff einschränken.
