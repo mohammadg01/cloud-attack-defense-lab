@@ -123,9 +123,9 @@ Ein paar Sachen, an denen ich haengengeblieben bin:
 
 ## Status
 
-- [x] Woche 1: Setup, Repo, Notizen, Lab-Dienste
-- [x] Woche 2: Angriff ausgefuehrt, Wazuh-Regel, Alarm
-- [x] Woche 3: SSRF behoben, Doku, Vorher/Nachher
+- [x] Phase 1: Setup, Repo, Notizen, Lab-Dienste
+- [x] Phase 2: Angriff ausgefuehrt, Wazuh-Regel, Alarm
+- [x] Phase 3: SSRF behoben, Doku, Vorher/Nachher
 
 ## Hinweis
 
