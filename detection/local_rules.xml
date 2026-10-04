@@ -1,0 +1,15 @@
+<!-- Wazuh-Regel: erkennt SSRF-Zugriffe auf den Cloud-Metadaten-Dienst.
+     Installation: Inhalt nach /var/ossec/etc/rules/local_rules.xml,
+     dann 'sudo systemctl restart wazuh-manager'. -->
+<group name="webapp,ssrf,">
+  <rule id="100100" level="12">
+    <decoded_as>json</decoded_as>
+    <field name="event">webapp_fetch</field>
+    <url>169.254.169.254</url>
+    <description>SSRF erkannt: Zugriff auf Cloud-Metadaten-Dienst (IMDS 169.254.169.254)</description>
+    <mitre>
+      <id>T1190</id>
+      <id>T1552.005</id>
+    </mitre>
+  </rule>
+</group>

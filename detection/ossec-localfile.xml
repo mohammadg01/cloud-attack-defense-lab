@@ -1,0 +1,7 @@
+<!-- An /var/ossec/etc/ossec.conf anhaengen, damit Wazuh das Web-App-Log liest. -->
+<ossec_config>
+  <localfile>
+    <log_format>json</log_format>
+    <location>/var/log/webapp/fetch.log</location>
+  </localfile>
+</ossec_config>

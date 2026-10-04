@@ -1,10 +1,22 @@
 from flask import Flask, request, Response
-import requests
+import requests, json, os
+from datetime import datetime, timezone
 
 app = Flask(__name__)
+LOG_PATH = "/var/log/webapp/fetch.log"
 
-# Startseite mit kleinem Formular - simuliert eine "URL-Vorschau"-Funktion,
-# wie man sie in echten Apps oft findet (Link-Preview, Import, Webhook-Test).
+def log_fetch(url, client_ip):
+    # Jeden Abruf als JSON-Zeile protokollieren - Wazuh liest JSON nativ.
+    os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
+    entry = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "event": "webapp_fetch",
+        "client": client_ip,
+        "url": url,
+    }
+    with open(LOG_PATH, "a") as f:
+        f.write(json.dumps(entry) + "\n")
+
 @app.route("/")
 def index():
     return """
@@ -16,19 +28,14 @@ def index():
     </form>
     """
 
-# ---- SSRF-Schwachstelle ----
-# Der Endpunkt nimmt eine beliebige URL und ruft sie SERVER-seitig ab,
-# OHNE das Ziel zu pruefen. Dadurch kann ein Angreifer interne Adressen
-# erreichen, die von aussen nicht erreichbar sind - z.B. den Metadaten-Dienst
-# unter 169.254.169.254. Genau das ist die Luecke, die wir spaeter ausnutzen.
+# ---- SSRF-Schwachstelle (siehe Kommentar in Woche 1) ----
 @app.route("/fetch")
 def fetch():
     url = request.args.get("url", "")
     if not url:
         return "Parameter 'url' fehlt", 400
+    log_fetch(url, request.remote_addr)   # <-- fuer die Erkennung
     try:
-        # KEINE Pruefung des Ziels -> SSRF. Header werden mit weitergegeben,
-        # damit auch der vom IMDS erwartete 'Metadata: true' durchkommen kann.
         headers = {}
         if request.args.get("metadata") == "true":
             headers["Metadata"] = "true"

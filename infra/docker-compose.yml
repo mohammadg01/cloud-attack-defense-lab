@@ -1,23 +1,22 @@
 services:
-  # Dienst 1: Metadaten-Dienst, bekommt die feste IMDS-Adresse.
   imds-mock:
     build: ../imds-mock
     networks:
       labnet:
         ipv4_address: 169.254.169.254
 
-  # Dienst 2: verwundbare Web-App, von aussen auf Port 5000 erreichbar.
   webapp:
     build: ../webapp
     ports:
       - "5000:5000"
+    volumes:
+      - /var/log/webapp:/var/log/webapp
     networks:
       - labnet
     depends_on:
       - imds-mock
       - azurite
 
-  # Dienst 3: Azure-Storage-Emulator (fertiges Image), Blob-Port 10000.
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
     command: "azurite-blob --blobHost 0.0.0.0"
@@ -26,7 +25,6 @@ services:
     networks:
       - labnet
 
-# Eigenes Netz mit einem Subnetz, das die echte IMDS-Adresse enthaelt.
 networks:
   labnet:
     driver: bridge
